@@ -4,10 +4,11 @@ target/
 .cache
 .lib/
 .bsp/
-.vscode
+.vscode/
 .metals/
 .bloop/
 .scala-build/
+.venv/
 
 *.class
 *.log
