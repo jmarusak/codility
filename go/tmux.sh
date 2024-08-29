@@ -10,13 +10,13 @@ tmux split-window -v -p 24
 tmux select-pane -t 0
 
 # Send a command to the top pane (optional)
-tmux send-keys 'vi' C-m
+tmux send-keys "vi $1" C-m
 
 # Select the bottom pane
 tmux select-pane -t 1
 
 # Send a command to the bottom pane (optional)
-tmux send-keys 'echo "./watcher.sh <filename>"' C-m
+tmux send-keys "./watcher.sh $1" C-m
 
 # Attach to the tmux session
 tmux attach-session -t katas
