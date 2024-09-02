@@ -1,17 +1,24 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"json"
+	"log"
 )
 
 type Movie struct {
-	Title  string
-	Year   int
-	Color  bool
-	Actors []string
+	Title string
+	Year  int
 }
 
 func main() {
-	fmt.Printf("%[1]p : %#[1]v\n", m)
+	movies := []Movie{
+		{"Godfather", 1978},
+		{"Matrix", 1980},
+	}
+	b, err := json.Marshal(movies)
+	if err != nil {
+		log.Fatalf("JSON marshalling failed: %s", err)
+	}
+	fmt.Printf("%[1]p : %#[1]s\n", b)
 }
