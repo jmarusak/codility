@@ -2,25 +2,31 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"golang.org/x/net/html"
 )
 
 var depth int
 
-func parseHTML(url string) (*html.Node, error) {
+func main() {
+	url := "https://www.gopl.io/reviews.html"
+	outline(url)
+}
+
+func outline(url string) error {
 	resp, err := http.Get(url)
 	if err != nil {
-		return nil, fmt.Errorf("getting html of %v failed: %v", url, err)
+		return fmt.Errorf("getting html of %v failed: %v", url, err)
 	}
 	defer resp.Body.Close()
 	
 	doc, err := html.Parse(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("parsing html of %v failed: %v", url, err)
+		return fmt.Errorf("parsing html of %v failed: %v", url, err)
 	}
-	return doc, nil
+
+	forEachNode(doc, startElement, endElement)
+	return nil
 }
 
 func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
@@ -49,15 +55,4 @@ func endElement(n *html.Node) {
 		fmt.Printf("%*s</%s>\n", depth*2, " ",  n.Data)
 		depth--
 	}
-}
-
-func main() {
-	url := "https://www.gopl.io/reviews.html"
-
-	doc, err := parseHTML(url)
-	if err != nil {
-		log.Fatalf("outline: %v", err)
-	}
-
-	forEachNode(doc, startElement, endElement)
 }
