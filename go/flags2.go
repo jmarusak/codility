@@ -2,8 +2,6 @@ package main
 
 import (
 	"flag"
-	"strconv"
-	"os"
 	"fmt"
 )
 
@@ -14,27 +12,23 @@ func (c Celsius) String() string {
 }
 
 func (c *Celsius) Set(s string) error {
-	i, err := strconv.Atoi(s)
-	if err != nil {
-		fmt.Println("not a number")
-		os.Exit(1)
+	var value int
+	var unit string
+	fmt.Sscanf(s, "%d%s", &value, &unit)
+	if unit == "C" {
+		*c = Celsius(value)
+		return nil
 	}
-	*c = Celsius(i)
-	return nil
-}
-
-func addFlag(name string, value Celsius, usage string) *Celsius {
-	t := value
-	flag.Var(&t, name, usage)
-	return &t
+	return fmt.Errorf("invalid temperature %q", s)
 }
 
 func main() {
 	// checking if Celsius satisfies flag.Value interface
 	var _ flag.Value = new(Celsius)
 
-	var temp = addFlag("temp", 20, "the temperature")
+	var temp = Celsius(55)
+	flag.Var(&temp, "temp", "temperature")
 	flag.Parse()
-	fmt.Println(*temp)
+	fmt.Println(temp)
 
 }
